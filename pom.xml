@@ -13,6 +13,7 @@
         <module>producto-service</module>
         <module>orden-service</module>
         <module>servidor-eureka</module>
+        <module>servidor-config</module>
     </modules>
     <groupId>com.wintux</groupId>
 	<artifactId>20250819</artifactId>
