@@ -1,5 +1,6 @@
 package principalorden.Services;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class OrdenService {
     public List<Orden> getTodasLasOrdenes(){
         return ordenRepository.findAll();
     }
-
+    @CircuitBreaker(name="productoServiceCB", fallbackMethod = "fallbackObtenerProducto")
     public Orden registrarOrden(Orden orden){
         // Llamar al microservico de productos por HTTP
         //String productoUrl = "http://localhost:8091/producto/"+orden.getProductoid();
@@ -36,5 +37,13 @@ public class OrdenService {
         if(producto == null) throw new RuntimeException("Producto no encontrado");
         orden.setTotal(producto.getPrecio() * orden.getCantidad());
         return ordenRepository.save(orden);
+    }
+    public Orden fallbackObtenerProducto(Orden orden, Throwable throwable){
+        System.out.println("Fallback originado por: "+ throwable.getMessage());
+        Orden fallbackOrden = new Orden();
+        fallbackOrden.setProductoid(orden.getProductoid());
+        fallbackOrden.setCantidad(orden.getCantidad());
+        fallbackOrden.setTotal(-1.0);
+        return fallbackOrden;
     }
 }
