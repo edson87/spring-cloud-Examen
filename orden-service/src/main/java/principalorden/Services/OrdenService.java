@@ -44,6 +44,6 @@ public class OrdenService {
         fallbackOrden.setProductoid(orden.getProductoid());
         fallbackOrden.setCantidad(orden.getCantidad());
         fallbackOrden.setTotal(-1.0);
-        return fallbackOrden;
+        return ordenRepository.save(orden);
     }
 }
