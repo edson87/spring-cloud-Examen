@@ -10,6 +10,7 @@
 	</parent>
     <packaging>pom</packaging>
     <modules>
+        <module>commons</module>
         <module>producto-service</module>
         <module>orden-service</module>
         <module>servidor-eureka</module>

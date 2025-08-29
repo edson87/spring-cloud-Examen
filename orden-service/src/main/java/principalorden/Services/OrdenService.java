@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import principalcommons.OrdenEvento;
+import principalorden.Configs.OrdenEventoPublisher;
 import principalorden.Configs.ProductoClient;
 import principalorden.DTOs.Producto;
 import principalorden.Models.Orden;
@@ -21,6 +23,8 @@ public class OrdenService {
     private OrdenRepository ordenRepository;
 
     private final ProductoClient productoClient;
+    @Autowired
+    private OrdenEventoPublisher eventoPublisher;
 
     public List<Orden> getTodasLasOrdenes(){
         return ordenRepository.findAll();
@@ -36,7 +40,15 @@ public class OrdenService {
 
         if(producto == null) throw new RuntimeException("Producto no encontrado");
         orden.setTotal(producto.getPrecio() * orden.getCantidad());
-        return ordenRepository.save(orden);
+        Orden ordenGuardar = ordenRepository.save(orden);
+        eventoPublisher.publicarOrdenEvento(
+                new OrdenEvento(
+                        ordenGuardar.getId(),
+                        ordenGuardar.getProductoid(),
+                        ordenGuardar.getCantidad()
+                )
+        );
+        return ordenGuardar;
     }
     public Orden fallbackObtenerProducto(Orden orden, Throwable throwable){
         System.out.println("Fallback originado por: "+ throwable.getMessage());
