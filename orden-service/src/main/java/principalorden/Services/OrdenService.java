@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import principalcommons.OrdenEvento;
+import principalorden.Configs.KafkaOrdenEventoProducer;
 import principalorden.Configs.OrdenEventoPublisher;
 import principalorden.Configs.ProductoClient;
 import principalorden.DTOs.Producto;
@@ -25,7 +26,8 @@ public class OrdenService {
     private final ProductoClient productoClient;
     @Autowired
     private OrdenEventoPublisher eventoPublisher;
-
+    @Autowired
+    private KafkaOrdenEventoProducer kafkaProducer;
     public List<Orden> getTodasLasOrdenes(){
         return ordenRepository.findAll();
     }
@@ -42,6 +44,14 @@ public class OrdenService {
         orden.setTotal(producto.getPrecio() * orden.getCantidad());
         Orden ordenGuardar = ordenRepository.save(orden);
         eventoPublisher.publicarOrdenEvento(
+                new OrdenEvento(
+                        ordenGuardar.getId(),
+                        ordenGuardar.getProductoid(),
+                        ordenGuardar.getCantidad()
+                )
+        );
+        // Con Apache Kafka
+        kafkaProducer.enviarOrdenEvento(
                 new OrdenEvento(
                         ordenGuardar.getId(),
                         ordenGuardar.getProductoid(),
