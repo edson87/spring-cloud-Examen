@@ -66,11 +66,32 @@
             <artifactId>logstash-logback-encoder</artifactId>
             <version>8.1</version>
         </dependency>
+        <!-- Para cliente gRPC -->
+        <!-- https://mvnrepository.com/artifact/net.devh/grpc-client-spring-boot-starter -->
+        <dependency>
+            <groupId>net.devh</groupId>
+            <artifactId>grpc-client-spring-boot-starter</artifactId>
+            <version>3.1.0.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-protobuf</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-stub</artifactId>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/io.grpc/grpc-netty-shaded -->
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-netty-shaded</artifactId>
+        </dependency>
     </dependencies>
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring-grpc.version>0.10.0</spring-grpc.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -78,6 +99,13 @@
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
                 <version>2025.0.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.grpc</groupId>
+                <artifactId>spring-grpc-dependencies</artifactId>
+                <version>${spring-grpc.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
