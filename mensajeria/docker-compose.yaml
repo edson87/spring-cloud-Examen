@@ -12,7 +12,7 @@ services:
     mem_limit: 256m
     cpus: 0.25
     networks:
-      -sbanet
+      - sbanet
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.4.0

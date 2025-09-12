@@ -76,7 +76,7 @@ services:
   inventario-service:
     build:
       context: .
-      dockerfile: inventario-sevice/Dockerfile
+      dockerfile: inventario-service/Dockerfile
       args:
         SERVICE_NAME: inventario-service
     ports:
