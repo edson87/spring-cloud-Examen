@@ -10,6 +10,11 @@ services:
       - /home/rusok/Descargas/20250819/orden-service/target/logs:/host-logs2:ro
     depends_on:
       - logstash
+    mem_limit: 128m
+    cpus: 0.25
+    networks:
+      - sbanet
+
   logstash:
     image: docker.elastic.co/logstash/logstash:8.11.1
     container_name: logstash
@@ -18,6 +23,13 @@ services:
      - "9600:9600"
     volumes:
       - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+    environment:
+      - LS_JAVA_OPTS=-Xms256m -Xmx256m
+    mem_limit: 512m
+    cpus: 0.25
+    networks:
+      - sbanet
+
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.11.1
     container_name: elasticsearch
@@ -29,6 +41,11 @@ services:
       - "9200:9200"
     volumes:
       - esdata:/usr/share/elasticsearch/data
+    mem_limit: 512m
+    cpus: 0.25
+    networks:
+      - sbanet
+
   kibana:
     image: docker.elastic.co/kibana/kibana:8.11.1
     container_name: kibana
@@ -36,5 +53,13 @@ services:
       - "5601:5601"
     environment:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    mem_limit: 512m
+    cpus: 0.25
+    networks:
+      - sbanet
+
 volumes:
   esdata:
+networks:
+  sbanet:
+    external: true
