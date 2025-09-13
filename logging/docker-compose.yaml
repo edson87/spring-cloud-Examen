@@ -8,6 +8,7 @@ services:
       - ./filebeat.yml:/usr/share/filebeat/filebeat.yml:ro
       - /home/rusok/Descargas/20250819/producto-service/target/logs:/host-logs:ro
       - /home/rusok/Descargas/20250819/orden-service/target/logs:/host-logs2:ro
+      - /home/rusok/Descargas/20250819/inventario-service/target/logs:/host-logs3:ro
     depends_on:
       - logstash
     mem_limit: 128m

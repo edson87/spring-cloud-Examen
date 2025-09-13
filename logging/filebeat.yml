@@ -11,5 +11,11 @@ filebeat.inputs:
      - /host-logs2/*.log
     fields:
       service: orden-service
+  - type: log
+    enabled: true
+    paths:
+      - /host-logs3/*.log
+    fields:
+      service: inventario-service
 output.logstash:
   hosts: ["logstash:5044"]
